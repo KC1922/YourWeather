@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YourWeather</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home_page_style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-tabs">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('forecast') }}">Forecast</a>
+            <a href="{{ url_for('radar') }}">Radar</a>
+            <a href="{{ url_for('weather_history') }}">Weather History</a>
+            <a href="{{ url_for('about') }}">About</a>
+        </div>
+        
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo-no-background.png') }}" alt="Logo">
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" name="location" placeholder="Enter your location">
+            <button>Search</button>
+        </div>
+    </div>
+    
+    <div class="header">
+        <h1>YourWeather for {{ location }}</h1>
+        <h1>{{ time }}</h1>
+    </div>
+    
+    <div class="weather-container">
+        <div class="additional-details">
+            <div class="additional-left">
+              <div>
+                <p>Rain Chance: {{ rain_chance }}%</p>
+                <p>Wind: {{ wind_speed }}mph {{ wind_direction }}</p>
+                <p>Wind (Gust): {{ wind_gust }}mph</p>
+                <p>Visability: {{ visability }}km</p>
+              </div>
+            </div>
+            <div class="weather-details">
+                <div class="weather-temperature">
+                <div class="temperature">
+                    <h2>{{ temperature }}°F</h2>
+                    <p>{{ condition }}</p>
+                    <p>Feels Like (Heat Index): {{feels_like}}°F</p>
+                </div>
+                </div>
+                <div class="weather-icon">      
+                    <img src="{{ url_for('static', filename=icon_filename) }}" alt="Weather Icon">
+                </div>
+            </div>
+            <div class="additional-right">
+              <div>
+                <p>High: {{ temp_high }}°F</p>
+                <p>Low: {{ temp_low }}°F</p>
+                <p>Humidity: {{ humidity }}%</p>
+                <p>Dew Point: {{ dew_point }}</p>
+              </div>
+            </div>
+          </div>
+
+    </div>
+</body>
+</html>
