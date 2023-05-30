@@ -1,0 +1,15 @@
+to run the enviroment: .venv\Scripts\Activate.ps1 
+    (put in powershell if error): Set-ExecutionPolicy Bypass
+
+Flask tutorial: https://code.visualstudio.com/docs/python/tutorial-flask
+
+to run website: python -m flask run
+
+icons: https://github.com/Makin-Things/weather-icons
+
+API Key: fbf5ddfd48f2e22c88896a1be5ac73e7
+
+API call to request current weather and forecast data:
+https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={API key}
+
+Google Maps API: AIzaSyDgH8JbnLrW49E5rE8RFXXewRkJLHLXekM
