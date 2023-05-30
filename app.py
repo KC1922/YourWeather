@@ -4,60 +4,65 @@ from datetime import datetime
 import pytz
 from icon_mapping import icon_mapping
 from directions import degrees_to_direction
+from location_name import get_location_name
 
 app = Flask(__name__)
 
-# Secret key for sessions
-app.secret_key = 'notVerySecure'
+#secret key for sessions
+app.secret_key = '154asd46dhy468!'
 
 @app.route('/set-location')
 def set_location():
     lat = request.args.get('lat')
     lon = request.args.get('lon')
-
-    # Store the location in the user's session
+    location = get_location_name(lat, lon)
+    
+    #store the location in the user's session
+    print("Set location:", lat, lon, location)  #debugging line
     session['lat'] = lat
     session['lon'] = lon
+    session['location'] = location
 
-    return '', 204  # Return an empty response with a status code of 204 (No Content)
+    return '', 204  #return success with no content
 
 
 @app.route('/')
 def home():
-    # Default to Tampa, Florida if no location is set in the session
-    lat = float(session.get('lat', 27.9506))  # Use a default value in case the location has not been set
-    lon = float(session.get('lon', -82.4572))  # Use a default value in case the location has not been set
+    #default to New York, NY if no location is set in the session
+    location = session.get('location', 'New York, New York')
+    lat = float(session.get('lat', 40.7128))  
+    lon = float(session.get('lon', -74.0060))  
     
-    # Use the latitude and longitude from the session for the API request
+    #use the latitude and longitude from the session for the API request
     url = "https://api.openweathermap.org/data/2.5/onecall"
     params = {
-        "lat": lat,  # Use the latitude from the session
-        "lon": lon,  # Use the longitude from the session
+        "lat": lat, 
+        "lon": lon, 
         "appid": "fbf5ddfd48f2e22c88896a1be5ac73e7", 
         "units": "imperial"
     }
     response = requests.get(url, params=params)
     data = response.json()
-
-    # Get the current date and time in the returned timezone
+    print("current location:", location, lat, lon)  #debugging line
+    #get the current date and time in the returned timezone
     tz = pytz.timezone(data['timezone'])
     now = datetime.now(tz)
     current_time = now.strftime("%B %d, %Y %I:%M %p")
 
-    # Determine if day or night for the current weather icon
+    #determine if day or night for the current weather icon
     condition_id = data["current"]["weather"][0]["id"]
     if 800 > condition_id > 602:
-        time_of_day = ".svg" # Nessasary since some of the weather icons do not have day/night versions
-    elif 6 <= now.hour < 19:  # Day time
+        time_of_day = ".svg" #nessasary since some of the weather icons do not have day/night versions
+    elif 6 <= now.hour < 19:  #day time
         time_of_day = "-day.svg"
-    else:  # Night time
+    else: 
         time_of_day = "-night.svg"
 
 
-    # Get the corresponding icon filename from your mapping
+    #get the corresponding icon filename from your mapping
     icon_filename = icon_mapping.get(condition_id) + time_of_day 
 
-    # Extract needed values from data to be returned to the home.html template
+    #extract needed values from data to be returned to the home.html template
     temperature = round(data["current"]["temp"])
     feels_like = round(data["current"]["feels_like"])
     condition = data["current"]["weather"][0]["description"]
